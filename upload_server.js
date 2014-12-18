@@ -187,13 +187,13 @@ FileInfo.prototype.initUrls = function (req, form) {
       subDirectory = options.getDirectory(this.name, form.formFields),
       baseUrl = (options.ssl ? 'https:' : 'http:') +
         '//' + req.headers.host + options.uploadUrl;
-    this.url = baseUrl + (subDirectory ? (subDirectory + '/') : '') + encodeURIComponent(this.name);
+    this.url = baseUrl + (subDirectory ? (subDirectory + '/') : '') + encodeURIComponent(this.newName);
     Object.keys(options.imageVersions).forEach(function (version) {
       if (_existsSync(
-          options.uploadDir + '/' + version + '/' + that.name
+          options.uploadDir + '/' + version + '/' + that.newName
         )) {
         that[version + 'Url'] = baseUrl + version + '/' +
-        encodeURIComponent(that.name);
+        encodeURIComponent(that.newName);
       }
     });
   }
@@ -258,6 +258,8 @@ UploadHandler.prototype.post = function () {
 
     // set the file name
     fileInfo.path = folder + "/" + newFileName;
+    fileInfo.newName = newFileName;
+
 
     fs.renameSync(file.path, currentFolder + "/" + newFileName);
 
